@@ -5,56 +5,71 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
+#define PORT 8000
+#define BUFFER_SIZE 255
+
 int main() {
     int sockfd, newsockfd;
     struct sockaddr_in serv_addr, cli_addr;
     socklen_t clilen;
-    char buffer[255];
+    char buffer[BUFFER_SIZE];
 
-
+ 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        perror("Error opening socket");
+        perror("Socket creation failed");
         exit(1);
     }
 
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(8000);
+    serv_addr.sin_port = htons(PORT);
 
-  
+
     if (bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         perror("Binding failed");
         close(sockfd);
         exit(1);
     }
 
-
     listen(sockfd, 5);
-
-
     clilen = sizeof(cli_addr);
+
+
     newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
     if (newsockfd < 0) {
-        perror("Error on accept");
+        perror("Accept failed");
         close(sockfd);
         exit(1);
     }
 
- 
+    printf("Client connected!\n");
+
     while (1) {
-        bzero(buffer, 255);
-        int n = read(newsockfd, buffer, 255);
-        if (n <= 0) break;
+        bzero(buffer, BUFFER_SIZE);
+        int n = read(newsockfd, buffer, BUFFER_SIZE);
+        if (n <= 0) {
+            printf("Client disconnected.\n");
+            break;
+        }
 
         printf("Client: %s", buffer);
 
-        bzero(buffer, 255);
-        fgets(buffer, 255, stdin);
+        if (strncmp("bye", buffer, 3) == 0) {
+            printf("Connection closing...\n");
+            break;
+        }
+
+        bzero(buffer, BUFFER_SIZE);
+        printf("You: ");
+        fgets(buffer, BUFFER_SIZE, stdin);
         write(newsockfd, buffer, strlen(buffer));
 
-        if (strncmp("bye", buffer, 3) == 0) break;
+        if (strncmp("bye", buffer, 3) == 0) {
+            printf("Connection closing...\n");
+            break;
+        }
     }
 
     close(newsockfd);
