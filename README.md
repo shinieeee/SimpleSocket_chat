@@ -7,7 +7,7 @@
 
 ## 📌 Features
 
-- 📡 Socket-based communication using TCP
+- 📡 Socket-based communication using TCP 
 - 🧑‍💻 Real-time, two-way message exchange
 - 🖥️ Terminal-based interface (CLI)
 - 🔒 Graceful termination with `"bye"`
