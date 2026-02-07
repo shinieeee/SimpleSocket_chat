@@ -20,7 +20,7 @@
 ## 🛠️ Requirements
 
 - GCC Compiler
-- Linux or UNIX-based system
+- Linux or UNIX-based system 
 - Basic knowledge of C and networking
 
 ---
