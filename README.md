@@ -10,7 +10,7 @@
 - 📡 Socket-based communication using TCP 
 - 🧑‍💻 Real-time, two-way message exchange
 - 🖥️ Terminal-based interface (CLI)
-- 🔒 Graceful termination with `"bye"`
+- 🔒 Graceful termination with `"bye"` 
 - 🧪 Great for learning network programming in C
 
 --- 
